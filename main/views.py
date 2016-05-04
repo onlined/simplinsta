@@ -1,15 +1,18 @@
 import requests
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
+from django.utils import timezone
+from django.core.urlresolvers import reverse
 
 from .models import Tag
+from .forms import TagForm
 
 def request_url(tag):
     return 'https://api.instagram.com/v1/tags/%s/media/recent?count=6&client_id=%s' % (tag, settings.INSTAGRAM_CLIENT_ID)
 
 def show_tag(request, tag=settings.DEFAULT_TAG):
-    recent_tags = Tag.objects.all()
+    recent_tags = Tag.objects.order_by('-time')[:20]
     res = requests.get(request_url(tag))
     urls = [[],[]]
     try:
@@ -18,17 +21,27 @@ def show_tag(request, tag=settings.DEFAULT_TAG):
             urls[i//3].append(post['images']['low_resolution']['url'])
     except:
         pass
+    if request.method == 'GET':
+        form = TagForm()
+    elif request.method == 'POST':
+        form = TagForm(request.POST)
+        if form.is_valid():
+            try:
+                obj = Tag.objects.get(name=form.cleaned_data['name'])
+            except:
+                obj = form.save(commit=False)
+            obj.time = timezone.now()
+            obj.save()
+            return redirect(reverse('show_tag',args=[obj.name]))
     return render(request, 'main/show_tag.html', context={
         'tag': tag,
+        'form': form,
         'recent_tags': recent_tags,
         'urls': urls,
     })
     
-def show_tag_prev(request):
+def show_tag_prev(request, tag):
     pass
     
 def show_tag_next(request):
-    pass
-    
-def find_tag(request):
     pass

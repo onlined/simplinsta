@@ -1,3 +1,5 @@
+{% load bootstrap3 %}
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,9 +9,20 @@
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     </head>
     <body>
-    <div class="container text-center">
+    <div class="container text-center" style="margin-bottom:20px;">
         <h1 style="font-size: 60px;">Simplinsta</h1>
         <h2>Simple Instagram client</h2>
+    </div>
+    <div class="container">
+        <div class="col-md-7 col-md-offset-3">
+            <form action="{% url 'show_tag' tag %}" method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form show_label=False layout='horizontal' %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+                {% endbuttons %}
+            </form>
+        </div>
     </div>
     <div class="container">
         <div class="col-md-8">
@@ -32,7 +45,7 @@
             <div class="page-header" style="margin-top:46px;">
                 <h2>Recent tags</h2>
             </div>
-            <ul style="padding-left: 0;">
+            <ul style="padding-left: 0;list-style-type: none;">
                 {% for tag in recent_tags %}
                     <li><a href="{% url 'show_tag' tag %}">#{{ tag }}</a></li>
                 {% endfor %}
