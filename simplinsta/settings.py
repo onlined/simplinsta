@@ -122,3 +122,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 INSTAGRAM_CLIENT_ID = os.environ['INSTAGRAM_CLIENT_ID']
+
+DEFAULT_TAG = 'mektebisultani'

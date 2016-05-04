@@ -5,7 +5,7 @@ from django.conf import settings
 
 from .models import Tag
 
-def show_tag(request, tag='mektebisultani'):
+def show_tag(request, tag=settings.DEFAULT_TAG):
     recent_tags = Tag.objects.all()
     res = requests.get('https://api.instagram.com/v1/tags/%s/media/recent?count=6&client_id=%s' % (tag, settings.INSTAGRAM_CLIENT_ID))
     data = res.json()
