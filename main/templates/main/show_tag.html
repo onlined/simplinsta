@@ -14,10 +14,12 @@
         <h2>Simple Instagram client</h2>
     </div>
     <div class="container">
-        <div class="col-md-7 col-md-offset-3">
+        <div class="col-md-6 col-md-offset-3">
             <form action="{% url 'show_tag' tag %}" method="POST">
                 {% csrf_token %}
-                {% bootstrap_form form show_label=False layout='horizontal' %}
+                {% for field in form %}
+                    {% bootstrap_field field show_label=False layout='horizontal' addon_before='#' %}
+                {% endfor %}
                 {% buttons %}
                     <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
                 {% endbuttons %}
