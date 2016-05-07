@@ -40,6 +40,11 @@
                     {% endfor %}
                 </div>
             {% endfor %}
+            <nav>
+                <ul class="pager">
+                    <li class="next"><a href="{% url 'show_tag_next' tag %}">Next page <span aria-hidden="true">&rarr;</span></a></li>
+                </ul> 
+            </nav>
         </div>
         <div class="col-md-4">
             <div class="page-header" style="margin-top:46px;">

@@ -8,15 +8,18 @@ from django.core.urlresolvers import reverse
 from .models import Tag
 from .forms import TagForm
 
-def request_url(tag):
-    return 'https://api.instagram.com/v1/tags/%s/media/recent?count=6&client_id=%s' % (tag, settings.INSTAGRAM_CLIENT_ID)
+def request_url(tag, max_tag_id = ''):
+    if max_tag_id != '':
+        max_tag_id = '&max_tag_id=' + max_tag_id
+    return 'https://api.instagram.com/v1/tags/%s/media/recent?count=6&client_id=%s%s' % (tag, settings.INSTAGRAM_CLIENT_ID, max_tag_id)
 
 def show_tag(request, tag=settings.DEFAULT_TAG):
     recent_tags = Tag.objects.order_by('-time')[:20]
-    res = requests.get(request_url(tag))
+    res = requests.get(request_url(tag,request.session.pop('max_tag_id','') if request.resolver_match.url_name == 'show_tag_next' else ''))
     urls = [[],[]]
     try:
         data = res.json()
+        request.session['max_tag_id'] = data['pagination']['next_max_tag_id']
         for i,post in enumerate(data['data']):
             urls[i//3].append(post['images']['low_resolution']['url'])
     except:
@@ -41,7 +44,4 @@ def show_tag(request, tag=settings.DEFAULT_TAG):
     })
     
 def show_tag_prev(request, tag):
-    pass
-    
-def show_tag_next(request):
     pass
