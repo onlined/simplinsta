@@ -42,6 +42,4 @@ def show_tag(request, tag=settings.DEFAULT_TAG):
         'recent_tags': recent_tags,
         'urls': urls,
     })
-    
-def show_tag_prev(request, tag):
-    pass
+
