@@ -1,6 +1,6 @@
 # simplinsta
 
-**NOTE: This project is archived because of the changes in Instagram API.**
+**NOTE: This project is archived because of the breaking changes in Instagram API.**
 
 Simple Instagram client
 
